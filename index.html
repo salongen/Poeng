@@ -1,0 +1,345 @@
+<!doctype html>
+<html lang="nb">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b0410">
+<title>Poppy Poeng</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bungee&family=Space+Grotesk:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0410;
+    --ink:#fff4f6;
+    --muted:#b79bb0;
+    --poppy:#ff2e4d;
+    --pink:#ff2ea6;
+    --line:rgba(255,255,255,.1);
+    --display:'Bungee','Impact',system-ui,sans-serif;
+    --body:'Space Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html{touch-action:manipulation}
+  body{
+    margin:0;min-height:100vh;color:var(--ink);font-family:var(--body);
+    background:
+      radial-gradient(900px 500px at 85% -10%, rgba(255,46,77,.28), transparent 60%),
+      radial-gradient(700px 500px at -10% 30%, rgba(181,55,255,.20), transparent 60%),
+      radial-gradient(800px 600px at 50% 120%, rgba(255,46,166,.22), transparent 60%),
+      var(--bg);
+    background-attachment:fixed;
+    padding:max(16px,env(safe-area-inset-top)) 16px max(40px,env(safe-area-inset-bottom));
+  }
+  body::before{
+    content:"";position:fixed;inset:0;pointer-events:none;opacity:.5;
+    background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);
+    background-size:44px 44px;
+    mask-image:radial-gradient(circle at 50% 30%,#000 0,transparent 75%);
+    -webkit-mask-image:radial-gradient(circle at 50% 30%,#000 0,transparent 75%);
+  }
+  .wrap{position:relative;max-width:900px;margin:0 auto}
+
+  header{display:flex;align-items:center;gap:14px;padding:6px 0 18px}
+  .logo{width:52px;height:52px;flex:none;filter:drop-shadow(0 0 10px var(--poppy)) drop-shadow(0 0 22px rgba(255,46,77,.6))}
+  h1{
+    margin:0;font-family:var(--display);font-weight:400;font-size:clamp(1.8rem,7vw,2.8rem);line-height:1;letter-spacing:.02em;
+    color:#fff;text-shadow:0 0 6px var(--poppy),0 0 18px var(--poppy),0 0 38px var(--pink);
+  }
+  header p{margin:6px 0 0;color:var(--muted);font-size:.85rem;letter-spacing:.14em;text-transform:uppercase}
+
+  h2{margin:0;font-family:var(--display);font-weight:400;font-size:1.05rem;letter-spacing:.06em;color:var(--pink);text-shadow:0 0 10px rgba(255,46,166,.7)}
+  .sechead{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:12px}
+
+  button{font-family:var(--body);cursor:pointer;color:var(--ink)}
+  .ghost{background:transparent;border:1.5px solid var(--line);border-radius:12px;padding:9px 14px;font-size:.9rem;font-weight:500;transition:.15s}
+  .ghost:hover{border-color:var(--poppy);box-shadow:0 0 12px rgba(255,46,77,.4)}
+  .ghost:disabled{opacity:.35;cursor:default;box-shadow:none;border-color:var(--line)}
+
+  /* ---------- Gi poeng ---------- */
+  #rows{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:10px}
+  .row{
+    --c:#ff2e4d;
+    display:flex;align-items:center;gap:10px;padding:10px 10px 10px 14px;border-radius:18px;
+    background:linear-gradient(160deg,rgba(255,255,255,.07),rgba(255,255,255,.02));
+    border:1.5px solid color-mix(in srgb,var(--c) 70%,transparent);
+    box-shadow:0 0 0 1px rgba(0,0,0,.4),0 0 16px color-mix(in srgb,var(--c) 28%,transparent),inset 0 0 26px color-mix(in srgb,var(--c) 8%,transparent);
+  }
+  .row.flash{animation:flash .45s ease-out}
+  @keyframes flash{0%{box-shadow:0 0 0 1px rgba(0,0,0,.4),0 0 34px var(--c),inset 0 0 40px color-mix(in srgb,var(--c) 40%,transparent)}100%{}}
+  .dot{width:14px;height:14px;border-radius:50%;background:var(--c);box-shadow:0 0 10px var(--c);flex:none}
+  .name{
+    flex:1;min-width:0;background:transparent;border:0;border-bottom:1.5px dashed var(--line);color:var(--ink);
+    font:700 1.15rem var(--body);padding:6px 2px;outline:none;
+  }
+  .name::placeholder{color:var(--muted);font-weight:400}
+  .name:focus{border-bottom-color:var(--c)}
+  .row button{
+    flex:none;width:62px;height:52px;border-radius:14px;border:1.5px solid color-mix(in srgb,var(--c) 70%,transparent);
+    background:rgba(0,0,0,.35);font:700 1.25rem var(--body);transition:transform .08s,box-shadow .15s;
+  }
+  .row button.plus{background:color-mix(in srgb,var(--c) 30%,transparent);box-shadow:0 0 12px color-mix(in srgb,var(--c) 45%,transparent)}
+  .row button:active{transform:scale(.92)}
+
+  /* ---------- Oppsummering ---------- */
+  .panel{margin-top:30px;border:1.5px solid var(--line);border-radius:22px;padding:16px;background:rgba(0,0,0,.28)}
+  #sum{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+  #sum li{
+    --c:#ff2e4d;position:relative;overflow:hidden;display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;
+    padding:12px 16px 12px 12px;border-radius:16px;border:1.5px solid color-mix(in srgb,var(--c) 55%,transparent);
+    background:rgba(255,255,255,.03);
+  }
+  #sum li.leader{border-color:var(--c);box-shadow:0 0 26px color-mix(in srgb,var(--c) 50%,transparent),inset 0 0 34px color-mix(in srgb,var(--c) 14%,transparent)}
+  #sum .bar{position:absolute;inset:0 auto 0 0;width:var(--w,0%);background:linear-gradient(90deg,color-mix(in srgb,var(--c) 34%,transparent),transparent);transition:width .35s ease}
+  #sum li > *:not(.bar){position:relative}
+  #sum .pos{
+    font-family:var(--display);font-size:.9rem;min-width:34px;text-align:center;padding:6px 6px;border-radius:10px;
+    color:var(--bg);background:var(--c);box-shadow:0 0 10px var(--c);
+  }
+  #sum .who{font-weight:700;font-size:1.15rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #sum .crown{margin-left:6px;filter:drop-shadow(0 0 6px var(--c))}
+  #sum .pts{
+    font-family:var(--display);font-size:2.1rem;line-height:1;color:#fff;font-variant-numeric:tabular-nums;
+    text-shadow:0 0 6px var(--c),0 0 18px var(--c),0 0 34px var(--c);
+  }
+  #sum .pts.bump{animation:bump .3s ease-out}
+  @keyframes bump{0%{transform:scale(1)}40%{transform:scale(1.25)}100%{transform:scale(1)}}
+
+  #log{list-style:none;margin:0;padding:0;max-height:300px;overflow:auto}
+  #log li{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+  #log li:last-child{border-bottom:0}
+  #log .ldot{width:10px;height:10px;border-radius:50%;flex:none;background:var(--c);box-shadow:0 0 8px var(--c)}
+  #log .who{font-weight:700;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #log .delta{font-family:var(--display);font-size:1rem}
+  #log .delta.pos{color:#c6ff1a;text-shadow:0 0 8px rgba(198,255,26,.6)}
+  #log .delta.neg{color:var(--poppy);text-shadow:0 0 8px rgba(255,46,77,.7)}
+  #log .time{color:var(--muted);font-size:.78rem;flex:none}
+  .empty{color:var(--muted);font-size:.95rem;padding:6px 0}
+
+  footer{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+  footer .danger:hover{border-color:var(--poppy)}
+
+  #toast{
+    position:fixed;left:50%;bottom:max(22px,env(safe-area-inset-bottom));transform:translate(-50%,30px);opacity:0;pointer-events:none;
+    padding:10px 18px;border-radius:99px;background:rgba(11,4,16,.92);border:1.5px solid var(--c,var(--poppy));
+    font:700 1rem var(--body);color:#fff;box-shadow:0 0 22px var(--c,var(--poppy));transition:.2s;white-space:nowrap;
+  }
+  #toast.show{opacity:1;transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+      <g fill="#ff2e4d">
+        <ellipse cx="32" cy="17" rx="13" ry="16"/>
+        <ellipse cx="32" cy="17" rx="13" ry="16" transform="rotate(90 32 32)"/>
+        <ellipse cx="32" cy="17" rx="13" ry="16" transform="rotate(180 32 32)"/>
+        <ellipse cx="32" cy="17" rx="13" ry="16" transform="rotate(270 32 32)"/>
+      </g>
+      <g fill="#ff2ea6" opacity=".75">
+        <ellipse cx="32" cy="19" rx="9" ry="12" transform="rotate(45 32 32)"/>
+        <ellipse cx="32" cy="19" rx="9" ry="12" transform="rotate(135 32 32)"/>
+        <ellipse cx="32" cy="19" rx="9" ry="12" transform="rotate(225 32 32)"/>
+        <ellipse cx="32" cy="19" rx="9" ry="12" transform="rotate(315 32 32)"/>
+      </g>
+      <circle cx="32" cy="32" r="8" fill="#0b0410"/>
+      <g fill="#c6ff1a">
+        <circle cx="32" cy="26" r="1.6"/><circle cx="38" cy="32" r="1.6"/><circle cx="32" cy="38" r="1.6"/><circle cx="26" cy="32" r="1.6"/>
+      </g>
+    </svg>
+    <div>
+      <h1>Poppy Poeng</h1>
+      <p>Guttetur</p>
+    </div>
+  </header>
+
+  <section>
+    <div class="sechead">
+      <h2>Gi poeng</h2>
+      <button class="ghost" id="undo">↶ Angre siste</button>
+    </div>
+    <div id="rows"></div>
+  </section>
+
+  <section class="panel">
+    <div class="sechead"><h2>Oppsummering</h2></div>
+    <ul id="sum"></ul>
+  </section>
+
+  <section class="panel">
+    <div class="sechead"><h2>Hendelser</h2></div>
+    <ul id="log"></ul>
+  </section>
+
+  <footer>
+    <button class="ghost" id="resetScores">Nullstill poeng</button>
+    <button class="ghost danger" id="resetAll">Ny tur (tøm alt)</button>
+  </footer>
+</div>
+<div id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function(){
+  'use strict';
+  var KEY = 'neon-poppy-poeng-v1';
+  var COLORS = ['#ff2e4d','#ff8a00','#ff2ea6','#b537ff','#19e3ff','#c6ff1a'];
+  var MAX_LOG = 200;
+
+  function fresh(){
+    var p = [];
+    for (var i = 0; i < 6; i++) p.push({name:'', score:0});
+    return {players:p, log:[]};
+  }
+  function load(){
+    try{
+      var s = JSON.parse(localStorage.getItem(KEY));
+      if (s && Array.isArray(s.players) && s.players.length === 6){
+        s.players = s.players.map(function(p){
+          return {name: String(p.name || ''), score: Number(p.score) || 0};
+        });
+        s.log = Array.isArray(s.log) ? s.log : [];
+        return s;
+      }
+    }catch(e){}
+    return fresh();
+  }
+  function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+
+  var state = load();
+  var rowsEl = document.getElementById('rows');
+  var sumEl = document.getElementById('sum');
+  var logEl = document.getElementById('log');
+  var undoEl = document.getElementById('undo');
+  var toastEl = document.getElementById('toast');
+  var rows = [];
+  var toastTimer;
+
+  function displayName(i){ return state.players[i].name.trim() || ('Gutt ' + (i+1)); }
+  function buzz(p){ try{ if (navigator.vibrate) navigator.vibrate(p); }catch(e){} }
+
+  function build(){
+    state.players.forEach(function(p, i){
+      var r = document.createElement('div');
+      r.className = 'row';
+      r.style.setProperty('--c', COLORS[i]);
+      r.innerHTML =
+        '<span class="dot"></span>' +
+        '<input class="name" type="text" maxlength="20" autocomplete="off" autocapitalize="words" placeholder="Navn ' + (i+1) + '" aria-label="Navn ' + (i+1) + '">' +
+        '<button data-d="-1" aria-label="Trekk ett poeng">−1</button>' +
+        '<button class="plus" data-d="1" aria-label="Gi ett poeng">+1</button>';
+      var input = r.querySelector('.name');
+      input.value = p.name;
+      input.addEventListener('input', function(){
+        state.players[i].name = input.value;
+        save(); renderSummary(); renderLog();
+      });
+      r.addEventListener('click', function(e){
+        var b = e.target.closest('button');
+        if (!b || !b.dataset.d) return;
+        change(i, parseInt(b.dataset.d, 10));
+        r.classList.remove('flash'); void r.offsetWidth; r.classList.add('flash');
+      });
+      rowsEl.appendChild(r);
+      rows.push(r);
+    });
+  }
+
+  function renderSummary(bumpIdx){
+    var scores = state.players.map(function(p){ return p.score; });
+    var maxPos = Math.max.apply(null, scores.concat([0]));
+    var order = scores.map(function(s, i){ return i; }).sort(function(a, b){
+      return scores[b] - scores[a] || a - b;
+    });
+    sumEl.innerHTML = '';
+    order.forEach(function(i){
+      var s = scores[i];
+      var rank = 1 + scores.filter(function(x){ return x > s; }).length;
+      var li = document.createElement('li');
+      li.style.setProperty('--c', COLORS[i]);
+      if (rank === 1 && s > 0) li.className = 'leader';
+
+      var bar = document.createElement('span'); bar.className = 'bar';
+      bar.style.setProperty('--w', (maxPos > 0 && s > 0 ? Math.round(s / maxPos * 100) : 0) + '%');
+      var pos = document.createElement('span'); pos.className = 'pos'; pos.textContent = rank;
+      var who = document.createElement('span'); who.className = 'who'; who.textContent = displayName(i);
+      if (rank === 1 && s > 0){
+        var crown = document.createElement('span'); crown.className = 'crown'; crown.textContent = '👑';
+        who.appendChild(crown);
+      }
+      var pts = document.createElement('span'); pts.className = 'pts'; pts.textContent = s;
+      if (i === bumpIdx) pts.classList.add('bump');
+
+      li.appendChild(bar); li.appendChild(pos); li.appendChild(who); li.appendChild(pts);
+      sumEl.appendChild(li);
+    });
+  }
+
+  function renderLog(){
+    logEl.innerHTML = '';
+    undoEl.disabled = state.log.length === 0;
+    if (!state.log.length){
+      var li = document.createElement('li');
+      li.className = 'empty';
+      li.textContent = 'Ingen hendelser ennå. Del ut poeng!';
+      logEl.appendChild(li);
+      return;
+    }
+    state.log.slice(0, 40).forEach(function(e){
+      var li = document.createElement('li');
+      li.style.setProperty('--c', COLORS[e.i]);
+      var dot = document.createElement('span'); dot.className = 'ldot';
+      var who = document.createElement('span'); who.className = 'who'; who.textContent = displayName(e.i);
+      var d = document.createElement('span');
+      d.className = 'delta ' + (e.delta > 0 ? 'pos' : 'neg');
+      d.textContent = e.delta > 0 ? '+1' : '−1';
+      var t = document.createElement('span'); t.className = 'time';
+      t.textContent = new Date(e.t).toLocaleTimeString('nb-NO', {hour:'2-digit', minute:'2-digit'});
+      li.appendChild(dot); li.appendChild(who); li.appendChild(d); li.appendChild(t);
+      logEl.appendChild(li);
+    });
+  }
+
+  function toast(i, delta){
+    toastEl.textContent = displayName(i) + ' ' + (delta > 0 ? '+1' : '−1');
+    toastEl.style.setProperty('--c', COLORS[i]);
+    toastEl.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(function(){ toastEl.classList.remove('show'); }, 1100);
+  }
+
+  function change(i, delta){
+    state.players[i].score += delta;
+    state.log.unshift({t: Date.now(), i: i, delta: delta});
+    if (state.log.length > MAX_LOG) state.log.length = MAX_LOG;
+    save(); renderSummary(i); renderLog(); toast(i, delta);
+    buzz(delta > 0 ? 15 : [10, 30, 10]);
+  }
+
+  undoEl.addEventListener('click', function(){
+    var e = state.log.shift();
+    if (!e) return;
+    state.players[e.i].score -= e.delta;
+    save(); renderSummary(e.i); renderLog();
+  });
+
+  document.getElementById('resetScores').addEventListener('click', function(){
+    if (!confirm('Nullstille alle poeng og loggen? Navnene beholdes.')) return;
+    state.players.forEach(function(p){ p.score = 0; });
+    state.log = [];
+    save(); renderSummary(); renderLog();
+  });
+  document.getElementById('resetAll').addEventListener('click', function(){
+    if (!confirm('Starte ny tur? Navn, poeng og logg slettes.')) return;
+    state = fresh();
+    rows.forEach(function(r){ r.querySelector('.name').value = ''; });
+    save(); renderSummary(); renderLog();
+  });
+
+  build();
+  renderSummary();
+  renderLog();
+})();
+</script>
+</body>
+</html>
